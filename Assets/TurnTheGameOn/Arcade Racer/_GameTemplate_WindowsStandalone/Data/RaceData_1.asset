@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54c9a42e8a0fd8b43b42cdbbc0832b0e, type: 3}
+  m_Name: RaceData_1
+  m_EditorClassIdentifier: 
+  id: 1
+  sceneName: GameTemplate_QuickRace_1
+  raceName: 'Trial Hills: Challenge Day'
+  description: Time to show your stuff. Race for cash rewards!
+  menuImage: {fileID: 21300000, guid: 82bd32771fb284b4da6ce1d07d716cc0, type: 3}
+  laps: 1
+  preRaceTime: 7
+  racerInfo:
+  - name: Freestyle
+    player: 0
+    vehiclePrefab: {fileID: 5468139870835212720, guid: 58e1ff54a5a9ffd45aab9e633d0f63e7,
+      type: 3}
+  - name: BreakFreak
+    player: 0
+    vehiclePrefab: {fileID: 5468139870835212720, guid: 58e1ff54a5a9ffd45aab9e633d0f63e7,
+      type: 3}
+  - name: Lightspeed
+    player: 0
+    vehiclePrefab: {fileID: 5468139870835212720, guid: 58e1ff54a5a9ffd45aab9e633d0f63e7,
+      type: 3}
+  - name: Wolf
+    player: 0
+    vehiclePrefab: {fileID: 5468139870835212720, guid: 58e1ff54a5a9ffd45aab9e633d0f63e7,
+      type: 3}
+  - name: T-Wrecks
+    player: 0
+    vehiclePrefab: {fileID: 5468139870835212720, guid: 58e1ff54a5a9ffd45aab9e633d0f63e7,
+      type: 3}
+  - name: Wild Thing
+    player: 0
+    vehiclePrefab: {fileID: 5468139870835212720, guid: 58e1ff54a5a9ffd45aab9e633d0f63e7,
+      type: 3}
+  - name: Hurricane
+    player: 0
+    vehiclePrefab: {fileID: 5468139870835212720, guid: 58e1ff54a5a9ffd45aab9e633d0f63e7,
+      type: 3}
+  - name: Street King
+    player: 0
+    vehiclePrefab: {fileID: 5468139870835212720, guid: 58e1ff54a5a9ffd45aab9e633d0f63e7,
+      type: 3}
+  - name: Zoomer
+    player: 0
+    vehiclePrefab: {fileID: 5468139870835212720, guid: 58e1ff54a5a9ffd45aab9e633d0f63e7,
+      type: 3}
+  - name: Player
+    player: 1
+    vehiclePrefab: {fileID: 0}
+  prize: 555a000028230000ee020000
+  miniMapSettings:
+    enabled: 1
+    lockPositionAndRotation: 1
+    lockPosition: {x: -57, y: 210, z: -79}
+    lockRotation: {x: 90, y: 0, z: 0}
+    cameraSize: 97
+  useDefeatTimer: 0
+  defeatTimer: 90
+  unlockPrice: 4000
+  locked: 1
+  showWaypointArrow: 1
+  showWrongWayWarning: 1
+  usePlayerVictoryScene: 1
+  victorySceneName: GameTemplate_RaceVictory
+  defeatSceneName: GameTemplate_RaceDefeat
+  endSeriesOnDefeat: 0

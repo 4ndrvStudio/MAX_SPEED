@@ -1,0 +1,199 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &5682326486686131021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5468139870835212720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 122afb6980c4bec409631d8a99bc42bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AIController: {fileID: 5364179319663640406}
+  opponentMiniMapIconPrefab: {fileID: 1836880120206446424, guid: 49e2258f178fa5443b651f4d14dccbcb,
+    type: 3}
+--- !u!1001 &5469222910827788840
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1171526050773912, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+      propertyPath: m_Name
+      value: AI_Car_LeftSteering_Racer
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522752333533702, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522752333533702, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522752333533702, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522752333533702, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522752333533702, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522752333533702, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522752333533702, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522752333533702, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522752333533702, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522752333533702, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522752333533702, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224176262175976906, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224176262175976906, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 54310944264451086, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114235731991808032, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: vehicleSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 18bbb733ab8a1684485e87e35c524d15,
+        type: 2}
+    - target: {fileID: 114913817626419030, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: setAudioLimitOnStart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114913817626419030, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: engineVolumeLimitOnStart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826299379107198, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826299379107198, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: AISettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 1fecbb1d3a4ebd441bac798b780f74ff,
+        type: 2}
+    - target: {fileID: 114826299379107198, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: m_AISettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 1fecbb1d3a4ebd441bac798b780f74ff,
+        type: 2}
+    - target: {fileID: 114031825321484892, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 3758096384
+      objectReference: {fileID: 0}
+    - target: {fileID: 114624624704896216, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 3758096384
+      objectReference: {fileID: 0}
+    - target: {fileID: 114771284238790832, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 3758096384
+      objectReference: {fileID: 0}
+    - target: {fileID: 114850610098426260, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 3758096384
+      objectReference: {fileID: 0}
+    - target: {fileID: 114251565029174150, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 3758096384
+      objectReference: {fileID: 0}
+    - target: {fileID: 114381084737983162, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 3758096384
+      objectReference: {fileID: 0}
+    - target: {fileID: 114399561295934632, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 3758096384
+      objectReference: {fileID: 0}
+    - target: {fileID: 114394742679477494, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 3758096384
+      objectReference: {fileID: 0}
+    - target: {fileID: 114112389883107324, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 3758096384
+      objectReference: {fileID: 0}
+    - target: {fileID: 114724018647461222, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 3758096384
+      objectReference: {fileID: 0}
+    - target: {fileID: 114310007873708724, guid: ea141020d87625f47a4a3cc4b8c6403d,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 3758096384
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602891359402108, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ea141020d87625f47a4a3cc4b8c6403d, type: 3}
+--- !u!1 &5468139870835212720 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1171526050773912, guid: ea141020d87625f47a4a3cc4b8c6403d,
+    type: 3}
+  m_PrefabInstance: {fileID: 5469222910827788840}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5364179319663640406 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114826299379107198, guid: ea141020d87625f47a4a3cc4b8c6403d,
+    type: 3}
+  m_PrefabInstance: {fileID: 5469222910827788840}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5468139870835212720}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dac2e9bbe85203548b1cda2b54816042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

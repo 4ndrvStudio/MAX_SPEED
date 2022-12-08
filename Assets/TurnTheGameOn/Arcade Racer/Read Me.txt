@@ -1,0 +1,13 @@
+Thank you for purchasing Arcade Racer: Racing Game Development Kit
+
+A welcome window should appear after importing the asset to your project,
+it will help guide you through the setup process. If it does not, you can
+open the window manually by selecting: Tools/TurnTheGameOn/Arcade Racer/Welcome Window
+
+Documentation is located at:
+Assets\TurnTheGameOn\Documentation.pdf
+
+Tutorial videos can be found at:
+1. https://youtu.be/TdMk6ksu5KI Arcade Racer Import and Setup Tutorial
+2. https://youtu.be/M0hbGf-Juxs Workflow Tutorial
+3. https://youtu.be/A5lX3qC9yqo Using Edy's Vehicle Physics

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ce76587f5f270243b240c54c796c944, type: 3}
+  m_Name: PlayerVehicles
+  m_EditorClassIdentifier: 
+  playerVehicles:
+  - name: Warbler
+    price: 19000
+    stockTopSpeed: 125
+    owned: 1
+    vehiclePrefab: {fileID: 5275569749838721753, guid: 98e152448d794314daaf5eecc498d0db,
+      type: 3}
+    defaultBodyColorHex: FFFFFF
+    defaultWindowColorHex: 767676
+    defaultRimColorHex: ffffff
+    defaultWindowAlpha: 0.5
+  - name: Fiddler
+    price: 5
+    stockTopSpeed: 145
+    owned: 0
+    vehiclePrefab: {fileID: 1134726566208728151, guid: 64f01a1d5f2cf6649bbd8ed8d40e8052,
+      type: 3}
+    defaultBodyColorHex: FF0000
+    defaultWindowColorHex: 767676
+    defaultRimColorHex: ffffff
+    defaultWindowAlpha: 0.5
