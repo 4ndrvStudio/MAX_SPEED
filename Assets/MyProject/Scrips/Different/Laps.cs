@@ -8,7 +8,7 @@ public class Laps : MonoBehaviour
     public Transform[] checkPointArray;
     public static Transform[] checkpointA;
     public Record Player;
-    public TMP_Text TextLap;
+    //public TMP_Text TextLap;
     public GameObject winPanel;
     public static int currentCheckpoint = 0;
     public static int currentLap = 0;
@@ -27,12 +27,12 @@ public class Laps : MonoBehaviour
     void Update()
     {
         Lap = currentLap;
-        if (0 < currentCheckpoint && currentCheckpoint < 6)
+        if (0 < currentCheckpoint && currentCheckpoint < Player.checkPoints.Length)
             checkPoint = currentCheckpoint - 1;
         else
             checkPoint = 0;
         checkpointA = checkPointArray;
-        TextLap.text = "Checkpoint " + checkPoint.ToString() + " Lap " + Lap.ToString();
+        //TextLap.text = "Checkpoint " + checkPoint.ToString() + " Lap " + Lap.ToString();
         Player.lap = Lap;
         Player.checkPointId = checkPoint;
         if (Lap == 2)

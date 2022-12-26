@@ -74,8 +74,6 @@ public class CheckPoint : MonoBehaviour
         }
         if (transform == Laps.checkpointA[Laps.currentCheckpoint].transform)
         {
-            Debug.Log(transform);
-            Debug.Log(Laps.checkpointA[Laps.currentCheckpoint].transform);
             //Check so we dont exceed our checkpoint quantity
             if (Laps.currentCheckpoint + 1 < Laps.checkpointA.Length)
             {

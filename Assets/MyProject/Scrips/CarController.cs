@@ -5,6 +5,7 @@ using UnityEngine;
 public class CarController : Car
 {
     private Rigidbody player;
+    public Vector3 com;
     //public CarWheelSkid WheelSkid;
     public WheelColliders colliders;
     public WheelMeshes wheelMeshes;
@@ -17,16 +18,21 @@ public class CarController : Car
     public float motorPower;
     public float brakePower;
     public float slipAngle;
-    private float speed;
+    public float speed;
     public AnimationCurve steeringCurve;
 
     public CarMyByButton gasPedal;
     public CarMyByButton brakePedal;
     public CarMyByButton leftButton;
     public CarMyByButton rightButton;
+
+    private float speedClamped;
+    public float maxSpeed;
+    public int isEngineRunning;
     void Start()
     {
         player = gameObject.GetComponent<Rigidbody>();
+        player.centerOfMass = com;
         InstantiateSmokeAndSkid();
     }
     void InstantiateSmokeAndSkid()
@@ -51,7 +57,8 @@ public class CarController : Car
     }
     void FixedUpdate()
     {
-        speed = player.velocity.magnitude;
+        speed = colliders.RRWheel.rpm * colliders.RRWheel.radius * 2f * Mathf.PI / 10f;
+        speedClamped = Mathf.Lerp(speedClamped, speed, Time.deltaTime);
         CheckInput();
         ApplySteering();
         ApplyMotor();
@@ -70,6 +77,10 @@ public class CarController : Car
         if (brakePedal.isPressed)
         {
             gasInput -= brakePedal.dampenPress;
+        }
+        if (Mathf.Abs(gasInput) > 0 && isEngineRunning == 0)
+        {
+            StartCoroutine(GetComponent<Audio>().StartEngine());
         }
         steeringInput = Input.GetAxis("Horizontal");
         if (rightButton.isPressed)
@@ -91,14 +102,14 @@ public class CarController : Car
         {
             brakeInput = Mathf.Abs(gasInput);
         }
-        //else if (!gasPedal.isPressed && !brakePedal.isPressed && !rightButton.isPressed && !leftButton.isPressed)
-        //{
-        //    brakeInput = 0.1f;
-        //}
-        //else
-        //{
-        //    brakeInput = 0;
-        //}
+        else if (!gasPedal.isPressed && !brakePedal.isPressed && !rightButton.isPressed && !leftButton.isPressed)
+        {
+            brakeInput = 0.1f;
+        }
+        else
+        {
+            brakeInput = 0;
+        }
     }
     void ApplyBrake()
     {
@@ -109,6 +120,19 @@ public class CarController : Car
     }
     void ApplyMotor()
     {
+        //if (isEngineRunning > 1)
+        //{
+        //    if (Mathf.Abs(speed) < maxSpeed)
+        //    {
+        //        colliders.RRWheel.motorTorque = motorPower * gasInput;
+        //        colliders.RLWheel.motorTorque = motorPower * gasInput;
+        //    }
+        //    else
+        //    {
+        //        colliders.RRWheel.motorTorque = 0;
+        //        colliders.RLWheel.motorTorque = 0;
+        //    }
+        //}
         colliders.RRWheel.motorTorque = motorPower * gasInput;
         colliders.RLWheel.motorTorque = motorPower * gasInput;
     }
@@ -130,16 +154,16 @@ public class CarController : Car
         UpdateWheel(colliders.RRWheel, wheelMeshes.RRWheel);
         UpdateWheel(colliders.RLWheel, wheelMeshes.RLWheel);
     }
+    public WheelHit[] wheelHits = new WheelHit[4];
     void CheckParticles()
-    {
-        WheelHit[] wheelHits = new WheelHit[4];
+    {        
         colliders.FRWheel.GetGroundHit(out wheelHits[0]);
         colliders.FLWheel.GetGroundHit(out wheelHits[1]);
 
         colliders.RRWheel.GetGroundHit(out wheelHits[2]);
         colliders.RLWheel.GetGroundHit(out wheelHits[3]);
 
-        float slipAllowance = 0.5f;
+        float slipAllowance = 1f;
         if ((Mathf.Abs(wheelHits[0].sidewaysSlip) + Mathf.Abs(wheelHits[0].forwardSlip) > slipAllowance))
         {
             wheelParticles.FRWheel.Play();
@@ -175,11 +199,13 @@ public class CarController : Car
         {
             wheelParticles.RLWheel.Play();
             wheelParticles.RLSkid.emitting = true;
+            //StartCoroutine(GetComponent<Audio>().StartSkid());
         }
         else
         {
             wheelParticles.RLWheel.Stop();
             wheelParticles.RLSkid.emitting = false;
+            //StartCoroutine(GetComponent<Audio>().StopSkid());
         }
     }
     void UpdateWheel(WheelCollider coll, MeshRenderer wheelMesh)
@@ -189,6 +215,11 @@ public class CarController : Car
         coll.GetWorldPose(out position, out quat);
         wheelMesh.transform.position = position;
         wheelMesh.transform.rotation = quat;
+    }
+    public float GetSpeedRatio()
+    {
+        var gas = Mathf.Clamp(Mathf.Abs( gasInput), 0.5f, 1f);
+        return speedClamped * gas / maxSpeed;
     }
 }
 [System.Serializable]

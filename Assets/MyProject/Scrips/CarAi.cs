@@ -5,6 +5,7 @@ using UnityEngine;
 public class CarAi : Car
 {
     public Record carAi;
+    public bool run;
     public Transform[] path;
     public CheckPoint[] checkPoints;
     public WheelColliders colliders;
@@ -13,28 +14,32 @@ public class CarAi : Car
     public float speed;
     public Transform lookingPonit;
     public float avoidanceDistance;
-    //public float smoothFactor;
+    public float smoothFactor;
     public float reachingRadius;
 
     private int destination = 0;
+    public int checkPoint = 0;
     private Vector3 desiredDirection;
     private void Start()
     {
         carAi.lap = 1;
+        run = false;
         //speed = carAi.velocity.magnitude;
         //transform.gameObject.AddComponent<CarController>();
     }
-    private void Update()
+    private void FixedUpdate()
     {
-        Position();
-        if (IsBlocked(desiredDirection))
+        if (run)
         {
-            AvoidObstacle();
+            Position();
+            if (IsBlocked(desiredDirection))
+            {
+                AvoidObstacle();
+                StepForward();
+            }
             StepForward();
+            ApplyWheelPosition();
         }
-        StepForward();
-        ApplyWheelPosition();
-        checkLabForCarAI();
     }
 
     private void Position()
@@ -64,7 +69,7 @@ public class CarAi : Car
     }
     private void StepForward()
     {
-        //UpdateRotation();
+        UpdateRotation();
         ApplySteering();
         colliders.RRWheel.motorTorque = motorPower;
         colliders.RLWheel.motorTorque = motorPower;
@@ -77,20 +82,22 @@ public class CarAi : Car
         return Physics.SphereCast(lookingRay, 0.5f, avoidanceDistance);
     }
 
-    //private void UpdateRotation()
-    //{
-    //    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(desiredDirection), 2f * Time.deltaTime);
-    //}
+    private void UpdateRotation()
+    {
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(desiredDirection), smoothFactor * Time.deltaTime);
+    }
 
     float steeringAngle;
 
     void ApplySteering() 
     {
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(desiredDirection), 3f * Time.deltaTime);
         Vector3 flatDestination = path[destination].position;
         flatDestination.y = transform.position.y;
+        //print(flatDestination.y);
         steeringAngle = Vector3.SignedAngle(transform.forward, flatDestination - transform.position, Vector3.up);
-        steeringAngle = Mathf.Clamp(steeringAngle, -45, 45);
-        print($"Sterring: {steeringAngle}");
+        steeringAngle = Mathf.Clamp(steeringAngle, -90, 90);
+        //print($"Sterring: {steeringAngle}");
         colliders.FRWheel.steerAngle = steeringAngle;
         colliders.FLWheel.steerAngle = steeringAngle;
     }
@@ -112,17 +119,21 @@ public class CarAi : Car
 
     private void checkLabForCarAI()
     {
-        if (carAi.checkPointId == checkPoints.Length)
-        {
-            carAi.lap++;
-            carAi.checkPointId = 0;
-        }
+        
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "CheckPoint")
         {
-            carAi.checkPointId++;
+            checkPoint++;
+            if (checkPoint > 2)
+                carAi.checkPointId++;
+            if (checkPoint == checkPoints.Length)
+            {
+                carAi.lap++;
+                carAi.checkPointId = 0;
+                checkPoint = 0;
+            }
         }
     }
 

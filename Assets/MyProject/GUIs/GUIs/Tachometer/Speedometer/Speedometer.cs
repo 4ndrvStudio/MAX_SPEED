@@ -22,8 +22,8 @@ public class Speedometer : MonoBehaviour
     {
         // 3.6f to convert in kilometers
         // ** The speed must be clamped by the car controller **
-        speed = target.velocity.magnitude * 10f;
-
+        speed = target.velocity.magnitude * 20f;
+        speed = Mathf.Clamp(speed, 0, 260);
         if (speedLabel != null)
             speedLabel.text = ((int)speed) + " km/h";
         if (arrow != null)

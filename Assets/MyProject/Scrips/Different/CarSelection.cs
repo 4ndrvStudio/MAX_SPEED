@@ -44,21 +44,25 @@ public class CarSelection : MonoBehaviour
 
     public void Left()
     {
-
-        if (currentCar > 0)
-        {
+        if (currentCar == 0)
+            currentCar = cars.Length - 1;
+        else
             currentCar -= 1;
-            for (int i = 0; i < cars.Length; i++)
-            {
-                cars[i].SetActive(false);
-                cars[currentCar].SetActive(true);
-            }
+        for (int i = 0; i < cars.Length; i++)
+        {
+            cars[i].SetActive(false);
+            cars[currentCar].SetActive(true);
         }
     }
 
     public void Select()
     {
         PlayerPrefs.SetInt("SelectedCarID", currentCar);
+        print(PlayerPrefs.GetInt("SelectedCarID"));
         SceneManager.LoadScene(1);
+    }
+    public void Quit()
+    {
+        Application.Quit();
     }
 }
