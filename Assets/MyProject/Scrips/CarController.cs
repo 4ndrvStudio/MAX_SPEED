@@ -29,11 +29,27 @@ public class CarController : Car
     private float speedClamped;
     public float maxSpeed;
     public int isEngineRunning;
+
     void Start()
     {
         player = gameObject.GetComponent<Rigidbody>();
         player.centerOfMass = com;
         InstantiateSmokeAndSkid();
+        
+    }
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        if(IsOwner)
+        {
+            gasPedal = CarUI.Instance.gasPedal;
+            brakePedal = CarUI.Instance.brakePedal;
+            leftButton = CarUI.Instance.leftButton;
+            rightButton = CarUI.Instance.rightButton;
+
+            CameraController.Instance.SetFollow(this.transform);
+        }
+
     }
     void InstantiateSmokeAndSkid()
     {
@@ -55,11 +71,19 @@ public class CarController : Car
         wheelParticles.RLSkid = Instantiate(skidPrefab, colliders.RLWheel.transform.position - Vector3.up * colliders.FRWheel.radius, Quaternion.identity, colliders.RLWheel.transform).
             GetComponentInChildren<TrailRenderer>();
     }
+
+    private void Update()
+    {
+        if (base.IsOwner == false)
+            return;
+        CheckInput();
+    }
     void FixedUpdate()
     {
+        if (base.IsOwner == false)
+            return;
         speed = colliders.RRWheel.rpm * colliders.RRWheel.radius * 2f * Mathf.PI / 10f;
         speedClamped = Mathf.Lerp(speedClamped, speed, Time.deltaTime);
-        CheckInput();
         ApplySteering();
         ApplyMotor();
         ApplyBrake();
