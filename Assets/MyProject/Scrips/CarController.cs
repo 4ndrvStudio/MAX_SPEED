@@ -35,22 +35,28 @@ public class CarController : Car
         player = gameObject.GetComponent<Rigidbody>();
         player.centerOfMass = com;
         InstantiateSmokeAndSkid();
-        
-    }
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-        if(IsOwner)
-        {
             gasPedal = CarUI.Instance.gasPedal;
-            brakePedal = CarUI.Instance.brakePedal;
-            leftButton = CarUI.Instance.leftButton;
-            rightButton = CarUI.Instance.rightButton;
+          brakePedal = CarUI.Instance.brakePedal;
+         leftButton = CarUI.Instance.leftButton;
+         rightButton = CarUI.Instance.rightButton;
 
-            CameraController.Instance.SetFollow(this.transform);
-        }
+         CameraController.Instance.SetFollow(this.transform);
 
     }
+    //public override void OnStartClient()
+    //{
+    //    //base.OnStartClient();
+    //    //if(IsOwner)
+    //    //{
+    //    //    gasPedal = CarUI.Instance.gasPedal;
+    //    //    brakePedal = CarUI.Instance.brakePedal;
+    //    //    leftButton = CarUI.Instance.leftButton;
+    //    //    rightButton = CarUI.Instance.rightButton;
+
+    //    //    CameraController.Instance.SetFollow(this.transform);
+    //    //}
+
+    //}
     void InstantiateSmokeAndSkid()
     {
         wheelParticles.FRWheel = Instantiate(smokePrefab, colliders.FRWheel.transform.position - Vector3.up * colliders.FRWheel.radius, Quaternion.identity, colliders.FRWheel.transform)
@@ -74,14 +80,12 @@ public class CarController : Car
 
     private void Update()
     {
-        if (base.IsOwner == false)
-            return;
+     
         CheckInput();
     }
     void FixedUpdate()
     {
-        if (base.IsOwner == false)
-            return;
+  
         speed = colliders.RRWheel.rpm * colliders.RRWheel.radius * 2f * Mathf.PI / 10f;
         speedClamped = Mathf.Lerp(speedClamped, speed, Time.deltaTime);
         ApplySteering();

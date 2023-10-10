@@ -15464,7 +15464,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &740915280
 Transform:
   m_ObjectHideFlags: 0
@@ -15519,7 +15519,6 @@ MonoBehaviour:
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField:
   - {fileID: 645002574}
-  - {fileID: 2087237172}
   - {fileID: 43707434}
   SerializedTransformProperties:
     Position: {x: 831.2466, y: 0.3429966, z: -393.32135}
