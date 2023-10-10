@@ -7052,9 +7052,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4528afd9ffccc8947bccc012bcff2732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 328663985}
-  _networkObjectCache: {fileID: 328663985}
   carAi: {fileID: 0}
   run: 0
   checkPoint: 0
@@ -7263,8 +7260,7 @@ MonoBehaviour:
   <IsNested>k__BackingField: 0
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
-  _networkBehaviours:
-  - {fileID: 328663984}
+  _networkBehaviours: []
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   SerializedTransformProperties:
@@ -10311,9 +10307,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68363f4eb7e955f4791b1b9163d54920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 522692966}
-  _networkObjectCache: {fileID: 522692966}
   PanelCountdown: {fileID: 998462055}
   countDown: {fileID: 1124050011}
   soundTrack: {fileID: 1266719808}
@@ -10350,8 +10343,7 @@ MonoBehaviour:
   <IsNested>k__BackingField: 0
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
-  _networkBehaviours:
-  - {fileID: 522692964}
+  _networkBehaviours: []
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   SerializedTransformProperties:
@@ -15220,9 +15212,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4528afd9ffccc8947bccc012bcff2732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 740915282}
-  _networkObjectCache: {fileID: 43707434}
   carAi: {fileID: 43707433}
   run: 0
   checkPoint: 0
@@ -20747,9 +20736,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4528afd9ffccc8947bccc012bcff2732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 740915282}
-  _networkObjectCache: {fileID: 645002574}
   carAi: {fileID: 645002573}
   run: 0
   checkPoint: 0
@@ -40885,17 +40871,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 971599918fe81ad43ab316bd2a572834, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2087237172 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4320048289118662922, guid: bf4ab66753673fe43968da53263151d7, type: 3}
-  m_PrefabInstance: {fileID: 2087237170}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1591206450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2087237174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40908,9 +40883,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4528afd9ffccc8947bccc012bcff2732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 740915282}
-  _networkObjectCache: {fileID: 2087237172}
   carAi: {fileID: 2087237171}
   run: 0
   checkPoint: 0
@@ -42507,7 +42479,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1478940453552822253, guid: 4f01f143eff653243b5052269dbc5a9b, type: 3}
       propertyPath: <SceneId>k__BackingField
-      value: 14512066045818657920
+      value: 14512066045166264719
       objectReference: {fileID: 0}
     - target: {fileID: 4936622650349096921, guid: 4f01f143eff653243b5052269dbc5a9b, type: 3}
       propertyPath: m_Name
