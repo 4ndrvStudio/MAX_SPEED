@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CarController : Car
 {
-    private Rigidbody player;
+   [SerializeField] private Rigidbody player;
     public Vector3 com;
     //public CarWheelSkid WheelSkid;
     public WheelColliders colliders;
@@ -30,9 +30,9 @@ public class CarController : Car
     public float maxSpeed;
     public int isEngineRunning;
 
-    void Start()
+    void Awake()
     {
-        player = gameObject.GetComponent<Rigidbody>();
+       // player = gameObject.GetComponent<Rigidbody>();
         player.centerOfMass = com;
         slipAngle = 0;
         InstantiateSmokeAndSkid();
@@ -44,20 +44,18 @@ public class CarController : Car
          //CameraController.Instance.SetFollow(this.transform);
 
     }
-    //public override void OnStartClient()
-    //{
-    //    //base.OnStartClient();
-    //    //if(IsOwner)
-    //    //{
-    //    //    gasPedal = CarUI.Instance.gasPedal;
-    //    //    brakePedal = CarUI.Instance.brakePedal;
-    //    //    leftButton = CarUI.Instance.leftButton;
-    //    //    rightButton = CarUI.Instance.rightButton;
+ 
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        player.centerOfMass = com;
 
-    //    //    CameraController.Instance.SetFollow(this.transform);
-    //    //}
+        // player = gameObject.GetComponent<Rigidbody>();
 
-    //}
+        //CameraController.Instance.SetFollow(this.transform);
+
+
+    }
     void InstantiateSmokeAndSkid()
     {
         wheelParticles.FRWheel = Instantiate(smokePrefab, colliders.FRWheel.transform.position - Vector3.up * colliders.FRWheel.radius, Quaternion.identity, colliders.FRWheel.transform)

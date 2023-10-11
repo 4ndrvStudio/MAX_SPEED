@@ -5,7 +5,9 @@ using FishNet.Object.Prediction;
 using FishNet.Transporting;
 using UnityEngine;
 using FishNet;
+using static FishNet.Component.Transforming.NetworkTransform;
 
+[System.Serializable]
 public struct MoveData : IReplicateData
 {
     public float GasInput;
@@ -50,13 +52,15 @@ public class PredictedCar : NetworkBehaviour
     private float steeringInput;
     private float slipAngle;
 
-    private MoveData _clientMoveData;
+    [SerializeField] private MoveData _clientMoveData;
+    [SerializeField] private ReconcileData _clientReconcileData;
 
     private void Awake()
     {
         InstanceFinder.TimeManager.OnTick += TimeManager_OnTick;
-        InstanceFinder.TimeManager.OnUpdate += TimeManager_OnUpdate;
-       
+        InstanceFinder.TimeManager.OnPostTick += TimeManager_OnPostTick;
+
+
         player = GetComponent<Rigidbody>();
         controller = GetComponent<CarController>();
 
@@ -67,7 +71,8 @@ public class PredictedCar : NetworkBehaviour
         if (InstanceFinder.TimeManager != null)
         {
             InstanceFinder.TimeManager.OnTick -= TimeManager_OnTick;
-            InstanceFinder.TimeManager.OnUpdate -= TimeManager_OnUpdate;
+            InstanceFinder.TimeManager.OnPostTick -= TimeManager_OnPostTick;
+
         }
     }
 
@@ -91,31 +96,6 @@ public class PredictedCar : NetworkBehaviour
     {
         //_animIDSpeed = Animator.StringToHash("movement");
     }
-
-
-    private void TimeManager_OnTick()
-    {
-        if (base.IsOwner)
-        {
-          // Reconciliation(default, false);
-           CheckInput(out MoveData md);
-            Debug.Log(md.GasInput);
-           Move(md, false);
-        }
-        if (base.IsServer)
-        {
-            Move(default, true);
-            ReconcileData rd = new ReconcileData(transform.position, transform.rotation);
-            Reconciliation(rd, true);
-        }
-
-        //if( !IsServer && !IsOwner)
-        //{
-        //    ReconcileData rd = new ReconcileData(transform.position, transform.rotation);
-        //    Reconciliation(rd, true);
-        //}
-    }
-
     private void CheckInput(out MoveData md)
     {
         md = default;
@@ -126,7 +106,7 @@ public class PredictedCar : NetworkBehaviour
         CarMyByButton leftButton = CarUI.Instance.leftButton;
 
         gasInput = Input.GetAxis("Vertical");
-       
+
         if (gasPedal.isPressed)
         {
             gasInput += gasPedal.dampenPress;
@@ -137,7 +117,7 @@ public class PredictedCar : NetworkBehaviour
         }
 
         steeringInput = Input.GetAxis("Horizontal");
-        
+
         if (rightButton.isPressed)
         {
             steeringInput += rightButton.dampenPress;
@@ -177,14 +157,50 @@ public class PredictedCar : NetworkBehaviour
             SlipAngle = slipAngle,
         };
     }
-    
 
-
-    private void TimeManager_OnUpdate()
+    private void TimeManager_OnTick()
     {
         if (base.IsOwner)
         {
-            controller.Simulate(_clientMoveData, (float)TimeManager.TickDelta, !base.IsOwner && !base.IsServer);
+           Reconciliation(default, false);
+           CheckInput(out MoveData md);
+           Debug.Log(md.GasInput);
+           Move(md, false);
+        }
+        if (base.IsServer)
+        {
+            Move(default, true);
+        }
+
+        if (!IsServer && !IsOwner)
+        {
+           controller.Simulate(_clientMoveData, (float)TimeManager.TickDelta, true);
+        }
+
+    }
+    private void TimeManager_OnPostTick()
+    {
+        if (IsServer)
+        {
+            ReconcileData data = new ReconcileData()
+            {
+                Position = transform.position,
+                Rotation = transform.rotation,
+            };
+
+            ObserversMoveData(_clientMoveData, data);
+        }
+
+    }
+    
+
+
+    private void Update()
+    {
+        if (!IsServer && !IsOwner)
+        {
+            transform.position = _clientReconcileData.Position;
+            transform.rotation = _clientReconcileData.Rotation;
         } 
     }
 
@@ -193,20 +209,31 @@ public class PredictedCar : NetworkBehaviour
     {
         if (asServer || replaying)
         {
-            //controller.Simulate(md, (float)TimeManager.TickDelta, !base.IsOwner && !base.IsServer);
-        }
-        else if (!asServer)
             _clientMoveData = md;
+        }
+
+        controller.Simulate(md, (float)TimeManager.TickDelta, false);
 
     }
 
     [Reconcile]
     private void Reconciliation(ReconcileData rd, bool asServer, Channel channel = Channel.Unreliable)
     {
-        transform.position = rd.Position;
-        transform.rotation = rd.Rotation;
+      
+            transform.position = rd.Position;
+            transform.rotation = rd.Rotation;
     }
 
+
+    [ObserversRpc(ExcludeOwner = true, BufferLast = true)]
+    private void ObserversMoveData(MoveData lastMove, ReconcileData rd, Channel channel = Channel.Unreliable)
+    {
+        if (!base.IsServer && !base.IsOwner)
+        {
+            _clientMoveData = lastMove;
+            _clientReconcileData = rd;
+        }
+    }
 
 
 }
