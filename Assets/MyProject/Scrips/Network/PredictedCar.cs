@@ -4,10 +4,12 @@ using FishNet.Object;
 using FishNet.Object.Prediction;
 using FishNet.Transporting;
 using FishNet.Managing.Timing;
+using FishNet.Component.Prediction;
 
 using UnityEngine;
 using FishNet;
 using System;
+using Unity.VisualScripting;
 
 [System.Serializable]
 public struct MoveData : IReplicateData
@@ -28,11 +30,15 @@ public struct ReconcileData : IReconcileData
 {
     public Vector3 Position;
     public Quaternion Rotation;
+    public Vector3 Velocity;
+    public Vector3 AngularVelocity;
 
-    public ReconcileData(Vector3 position, Quaternion rotation)
+    public ReconcileData(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity)
     {
         Position = position;
         Rotation = rotation;
+        Velocity = velocity;
+        AngularVelocity = angularVelocity;
         _tick = 0;
     }
 
@@ -48,6 +54,7 @@ public class PredictedCar : NetworkBehaviour
 
     private Rigidbody player;
     private CarController controller;
+    private PredictedObject predictedObject;
 
     private float gasInput;
     private float brakeInput;
@@ -114,6 +121,11 @@ public class PredictedCar : NetworkBehaviour
     {
         base.OnStartClient();
 
+        if(!IsOwner && !IsServer)
+        {
+            
+        }
+
         if (base.IsOwner)
         {
             //_mainCamera = CameraManager.Instance.MainCamera.gameObject;
@@ -123,6 +135,7 @@ public class PredictedCar : NetworkBehaviour
     public override void OnStartNetwork()
     {
         base.OnStartNetwork();
+     
         _instantiatedLocalPosition = _carVisualRootObject.localPosition;
         _instantiatedLocalRotation = _carVisualRootObject.localRotation;
     }
@@ -137,7 +150,7 @@ public class PredictedCar : NetworkBehaviour
     {
         player = GetComponent<Rigidbody>();
         controller = GetComponent<CarController>();
-        SetPreviousTransformProperties();
+       // SetPreviousTransformProperties();
     }
 
     private void OnDestroy()
@@ -246,35 +259,36 @@ public class PredictedCar : NetworkBehaviour
             {
                 Position = transform.position,
                 Rotation = transform.rotation,
+                Velocity = player.velocity,
+                AngularVelocity = player.angularVelocity
             };
 
             ObserversMoveData(_clientMoveData, data);
             Reconciliation(data, true);
         }
-
-        ResetToTransformPreviousProperties();
+         //ResetToTransformPreviousProperties();
 
     }
     private void TimeManager_OnPreReconcile(NetworkBehaviour obj)
     {
-       // SetPreviousTransformProperties();
+           // SetPreviousTransformProperties();
     }
     private void TimeManager_OnPostReconcile(NetworkBehaviour obj)
     {
-       // _carVisualRootObject.SetPositionAndRotation(_previousPosition, _previousRotation);
+            //_carVisualRootObject.SetPositionAndRotation(_clientReconcileData.Position, _clientReconcileData.Rotation);
     }
     private void TimeManager_OnPreTick()
     {
-        //SetPreviousTransformProperties();
+           // SetPreviousTransformProperties();
     }
 
     private void Update()
     {
-        if(!IsServer && !IsOwner)
+        if (!IsServer && !IsOwner)
         {
             MoveToTarget();
         }
-     
+
     }
 
     [Replicate]
@@ -294,6 +308,8 @@ public class PredictedCar : NetworkBehaviour
     {
         transform.position = rd.Position;
         transform.rotation = rd.Rotation;
+        player.velocity = rd.Velocity;
+        player.angularVelocity = rd.AngularVelocity;
         //transform.rotation = SmoothDampQuaternion(transform.rotation, rd.Rotation, ref _smoothingRotationVelocity, SmoothingDuration);
     }
 
@@ -315,9 +331,9 @@ public class PredictedCar : NetworkBehaviour
     {
        transform.position = Vector3.SmoothDamp(transform.position, _clientReconcileData.Position, ref _smoothingPositionVelocity, SmoothingDuration);
        transform.rotation = SmoothDampQuaternion(transform.rotation, _clientReconcileData.Rotation, ref _smoothingRotationVelocity, SmoothingDuration);
-        //Transform t = _carVisualRootObject.transform;
-        // t.localPosition = Vector3.SmoothDamp(t.localPosition, _instantiatedLocalPosition, ref _smoothingPositionVelocity, SmoothingDuration);
-        // t.localRotation = SmoothDampQuaternion(t.localRotation, _instantiatedLocalRotation, ref _smoothingRotationVelocity, SmoothingDuration);
+       player.velocity = _clientReconcileData.Velocity;
+       player.angularVelocity = _clientReconcileData.AngularVelocity;
+     
     }
 
 

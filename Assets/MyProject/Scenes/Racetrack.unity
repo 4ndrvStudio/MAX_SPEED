@@ -42546,6 +42546,14 @@ PrefabInstance:
       propertyPath: <SceneId>k__BackingField
       value: 14512066045166264719
       objectReference: {fileID: 0}
+    - target: {fileID: 1478940453552822253, guid: 4f01f143eff653243b5052269dbc5a9b, type: 3}
+      propertyPath: _networkBehaviours.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1478940453552822253, guid: 4f01f143eff653243b5052269dbc5a9b, type: 3}
+      propertyPath: _networkBehaviours.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4936622650349096921, guid: 4f01f143eff653243b5052269dbc5a9b, type: 3}
       propertyPath: m_Name
       value: Player
