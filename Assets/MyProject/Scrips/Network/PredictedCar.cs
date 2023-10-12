@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using FishNet.Object;
 using FishNet.Object.Prediction;
 using FishNet.Transporting;
+using FishNet.Managing.Timing;
+
 using UnityEngine;
 using FishNet;
-using static FishNet.Component.Transforming.NetworkTransform;
+using System;
 
 [System.Serializable]
 public struct MoveData : IReplicateData
@@ -52,29 +54,61 @@ public class PredictedCar : NetworkBehaviour
     private float steeringInput;
     private float slipAngle;
 
+    public Transform _carVisualRootObject;
+
+    private Vector3 _previousPosition;
+    private Quaternion _previousRotation;
+
+    private Vector3 _instantiatedLocalPosition;
+    private Quaternion _instantiatedLocalRotation;
+
+    [Range(0.01f, 0.5f)]
+    public float SmoothingDuration = 0.05f;
+    private Vector3 _smoothingPositionVelocity = Vector3.zero;
+    private float _smoothingRotationVelocity;
+
+
     [SerializeField] private MoveData _clientMoveData;
     [SerializeField] private ReconcileData _clientReconcileData;
 
-    private void Awake()
+    private bool _subscribed = false;
+
+
+
+    private void ChangeSubscriptions(bool subscribe)
     {
-        InstanceFinder.TimeManager.OnTick += TimeManager_OnTick;
-        InstanceFinder.TimeManager.OnPostTick += TimeManager_OnPostTick;
+        if (base.TimeManager == null)
+            return;
+        if (subscribe == _subscribed)
+            return;
 
+        _subscribed = subscribe;
 
-        player = GetComponent<Rigidbody>();
-        controller = GetComponent<CarController>();
-
-    }
-
-    private void OnDestroy()
-    {
-        if (InstanceFinder.TimeManager != null)
+        if (subscribe)
         {
-            InstanceFinder.TimeManager.OnTick -= TimeManager_OnTick;
-            InstanceFinder.TimeManager.OnPostTick -= TimeManager_OnPostTick;
-
+            base.TimeManager.OnTick += TimeManager_OnTick;
+            base.TimeManager.OnPreTick += TimeManager_OnPreTick;
+            base.TimeManager.OnPostTick += TimeManager_OnPostTick;
+            base.PredictionManager.OnPreReconcile += TimeManager_OnPreReconcile;
+            base.PredictionManager.OnPostReconcile += TimeManager_OnPostReconcile;
+            //base.TimeManager.OnPreReplicateReplay += TimeManager_OnPreReplicateReplay;
+        }
+        else
+        {
+            base.TimeManager.OnTick -= TimeManager_OnTick;
+            base.TimeManager.OnPreTick -= TimeManager_OnPreTick;
+            base.TimeManager.OnPostTick -= TimeManager_OnPostTick;
+            base.PredictionManager.OnPreReconcile -= TimeManager_OnPreReconcile;
+            base.PredictionManager.OnPostReconcile -= TimeManager_OnPostReconcile;
+            //base.TimeManager.OnPreReplicateReplay -= TimeManager_OnPreReplicateReplay;
         }
     }
+
+    private void Start()
+    {
+        ChangeSubscriptions(true);
+    }
+
 
     public override void OnStartClient()
     {
@@ -89,13 +123,40 @@ public class PredictedCar : NetworkBehaviour
     public override void OnStartNetwork()
     {
         base.OnStartNetwork();
-        AssignAnimationIDs();
+        _instantiatedLocalPosition = _carVisualRootObject.localPosition;
+        _instantiatedLocalRotation = _carVisualRootObject.localRotation;
+    }
 
-    }
-    private void AssignAnimationIDs()
+    public override void OnStopNetwork()
     {
-        //_animIDSpeed = Animator.StringToHash("movement");
+        base.OnStopNetwork();
+        ChangeSubscriptions(false);
     }
+
+    private void Awake()
+    {
+        player = GetComponent<Rigidbody>();
+        controller = GetComponent<CarController>();
+        SetPreviousTransformProperties();
+    }
+
+    private void OnDestroy()
+    {
+        ChangeSubscriptions(false);
+    }
+
+    private void SetPreviousTransformProperties()
+    {
+        //_previousPosition = _carVisualRootObject.position;
+        //_previousRotation = _carVisualRootObject.rotation;
+    }
+
+    private void ResetToTransformPreviousProperties()
+    {
+        //_carVisualRootObject.position = _previousPosition;
+        //_carVisualRootObject.rotation = _previousRotation;
+    }
+
     private void CheckInput(out MoveData md)
     {
         md = default;
@@ -164,12 +225,11 @@ public class PredictedCar : NetworkBehaviour
         {
            Reconciliation(default, false);
            CheckInput(out MoveData md);
-           Debug.Log(md.GasInput);
            Move(md, false);
         }
         if (base.IsServer)
         {
-            Move(default, true);
+           Move(default, true);
         }
 
         if (!IsServer && !IsOwner)
@@ -189,19 +249,32 @@ public class PredictedCar : NetworkBehaviour
             };
 
             ObserversMoveData(_clientMoveData, data);
+            Reconciliation(data, true);
         }
 
-    }
-    
+        ResetToTransformPreviousProperties();
 
+    }
+    private void TimeManager_OnPreReconcile(NetworkBehaviour obj)
+    {
+       // SetPreviousTransformProperties();
+    }
+    private void TimeManager_OnPostReconcile(NetworkBehaviour obj)
+    {
+       // _carVisualRootObject.SetPositionAndRotation(_previousPosition, _previousRotation);
+    }
+    private void TimeManager_OnPreTick()
+    {
+        //SetPreviousTransformProperties();
+    }
 
     private void Update()
     {
-        if (!IsServer && !IsOwner)
+        if(!IsServer && !IsOwner)
         {
-            transform.position = _clientReconcileData.Position;
-            transform.rotation = _clientReconcileData.Rotation;
-        } 
+            MoveToTarget();
+        }
+     
     }
 
     [Replicate]
@@ -211,17 +284,40 @@ public class PredictedCar : NetworkBehaviour
         {
             _clientMoveData = md;
         }
-
+        
         controller.Simulate(md, (float)TimeManager.TickDelta, false);
-
+    
     }
 
     [Reconcile]
     private void Reconciliation(ReconcileData rd, bool asServer, Channel channel = Channel.Unreliable)
     {
-      
-            transform.position = rd.Position;
-            transform.rotation = rd.Rotation;
+        transform.position = rd.Position;
+        transform.rotation = rd.Rotation;
+        //transform.rotation = SmoothDampQuaternion(transform.rotation, rd.Rotation, ref _smoothingRotationVelocity, SmoothingDuration);
+    }
+
+    public static Quaternion SmoothDampQuaternion(Quaternion current, Quaternion target, ref float AngularVelocity, float smoothTime)
+    {
+        var delta = Quaternion.Angle(current, target);
+
+        if (delta > 0.0f)
+        {
+            var t = Mathf.SmoothDampAngle(delta, 0.0f, ref AngularVelocity, smoothTime);
+            t = 1.0f - t / delta;
+            return Quaternion.Slerp(current, target, t);
+        }
+
+        return current;
+    }
+
+    private void MoveToTarget()
+    {
+       transform.position = Vector3.SmoothDamp(transform.position, _clientReconcileData.Position, ref _smoothingPositionVelocity, SmoothingDuration);
+       transform.rotation = SmoothDampQuaternion(transform.rotation, _clientReconcileData.Rotation, ref _smoothingRotationVelocity, SmoothingDuration);
+        //Transform t = _carVisualRootObject.transform;
+        // t.localPosition = Vector3.SmoothDamp(t.localPosition, _instantiatedLocalPosition, ref _smoothingPositionVelocity, SmoothingDuration);
+        // t.localRotation = SmoothDampQuaternion(t.localRotation, _instantiatedLocalRotation, ref _smoothingRotationVelocity, SmoothingDuration);
     }
 
 

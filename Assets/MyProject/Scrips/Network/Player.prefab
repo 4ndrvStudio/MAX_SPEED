@@ -1564,6 +1564,8 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 1478940453552822253}
   _networkObjectCache: {fileID: 1478940453552822253}
+  _carVisualRootObject: {fileID: 8535216291381058874}
+  SmoothingDuration: 0.05
   _clientMoveData:
     GasInput: 0
     BrakeInput: 0
