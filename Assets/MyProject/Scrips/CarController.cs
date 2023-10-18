@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CarController : Car
 {
-   [SerializeField] private Rigidbody player;
+    [SerializeField] private Rigidbody player;
     public Vector3 com;
     //public CarWheelSkid WheelSkid;
     public WheelColliders colliders;
@@ -32,19 +32,19 @@ public class CarController : Car
 
     void Awake()
     {
-       // player = gameObject.GetComponent<Rigidbody>();
+        // player = gameObject.GetComponent<Rigidbody>();
         player.centerOfMass = com;
         slipAngle = 0;
         InstantiateSmokeAndSkid();
-         //   gasPedal = CarUI.Instance.gasPedal;
-         //   brakePedal = CarUI.Instance.brakePedal;
-         //   leftButton = CarUI.Instance.leftButton;
-         //   rightButton = CarUI.Instance.rightButton;
+        //   gasPedal = CarUI.Instance.gasPedal;
+        //   brakePedal = CarUI.Instance.brakePedal;
+        //   leftButton = CarUI.Instance.leftButton;
+        //   rightButton = CarUI.Instance.rightButton;
 
-         //CameraController.Instance.SetFollow(this.transform);
+        //CameraController.Instance.SetFollow(this.transform);
 
     }
- 
+
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -92,28 +92,28 @@ public class CarController : Car
         //ApplyWheelPosition();
     }
 
-    public void Simulate(MoveData moveData,float delta ,bool isVitural)
-    {
-        Debug.Log("Called");
+    //public void Simulate(MoveData moveData, float delta, bool isVitural)
+    //{
+    //    Debug.Log("Called");
 
-        speed = colliders.RRWheel.rpm * colliders.RRWheel.radius * 2f * Mathf.PI / 10f;
-        speedClamped = Mathf.Lerp(speedClamped, speed, delta);
-        slipAngle = moveData.SlipAngle;
-        gasInput = moveData.GasInput;
+    //    speed = colliders.RRWheel.rpm * colliders.RRWheel.radius * 2f * Mathf.PI / 10f;
+    //    speedClamped = Mathf.Lerp(speedClamped, speed, delta);
+    //    slipAngle = moveData.SlipAngle;
+    //    gasInput = moveData.GasInput;
 
-        ApplySteering(moveData, isVitural);
+    //    ApplySteering(moveData, isVitural);
 
-        if(isVitural == false)
-        {
-            ApplyMotor(moveData);
-        }
+    //    if (isVitural == false)
+    //    {
+    //        ApplyMotor(moveData);
+    //    }
 
-        ApplyBrake(moveData);
+    //    ApplyBrake(moveData);
 
-        //CheckParticles();
-        ApplyWheelPosition();
+    //    //CheckParticles();
+    //    ApplyWheelPosition();
 
-    }
+    //}
 
     void CheckInput()
     {
@@ -162,10 +162,10 @@ public class CarController : Car
 
     void ApplyBrake(MoveData moveData)
     {
-        colliders.FRWheel.brakeTorque = brakePower * moveData.BrakeInput * 0.7f;
-        colliders.FLWheel.brakeTorque = brakePower * moveData.BrakeInput * 0.7f;
-        colliders.RRWheel.brakeTorque = brakePower * moveData.BrakeInput * 0.3f;
-        colliders.RLWheel.brakeTorque = brakePower * moveData.BrakeInput * 0.3f;
+        //colliders.FRWheel.brakeTorque = brakePower * moveData.BrakeInput * 0.7f;
+        //colliders.FLWheel.brakeTorque = brakePower * moveData.BrakeInput * 0.7f;
+        //colliders.RRWheel.brakeTorque = brakePower * moveData.BrakeInput * 0.3f;
+        //colliders.RLWheel.brakeTorque = brakePower * moveData.BrakeInput * 0.3f;
     }
     void ApplyMotor(MoveData moveData)
     {
@@ -182,25 +182,25 @@ public class CarController : Car
         //        colliders.RLWheel.motorTorque = 0;
         //    }
         //}
-        colliders.RRWheel.motorTorque = motorPower * moveData.GasInput;
-        colliders.RLWheel.motorTorque = motorPower * moveData.GasInput;
+        //colliders.RRWheel.motorTorque = motorPower * moveData.GasInput;
+        //colliders.RLWheel.motorTorque = motorPower * moveData.GasInput;
     }
     void ApplySteering(MoveData data, bool isVitural)
     {
-        if(isVitural)
-        {
-            Debug.Log("Applied teerring");
-        }
-        float steeringAngle = data.SteeringInput * steeringCurve.Evaluate(speed);
+        //if (isVitural)
+        //{
+        //    Debug.Log("Applied teerring");
+        //}
+        //float steeringAngle = data.SteeringInput * steeringCurve.Evaluate(speed);
 
-        if (data.SlipAngle < 120f)
-        {
-            steeringAngle += Vector3.SignedAngle(transform.forward, player.velocity + transform.forward, Vector3.up);
-        }
+        //if (data.SlipAngle < 120f)
+        //{
+        //    steeringAngle += Vector3.SignedAngle(transform.forward, player.velocity + transform.forward, Vector3.up);
+        //}
 
-        steeringAngle = Mathf.Clamp(steeringAngle, -90f, 90f);
-        colliders.FRWheel.steerAngle = steeringAngle;
-        colliders.FLWheel.steerAngle = steeringAngle;
+        //steeringAngle = Mathf.Clamp(steeringAngle, -90f, 90f);
+        //colliders.FRWheel.steerAngle = steeringAngle;
+        //colliders.FLWheel.steerAngle = steeringAngle;
     }
     void ApplyWheelPosition()
     {
@@ -210,9 +210,9 @@ public class CarController : Car
         UpdateWheel(colliders.RLWheel, wheelMeshes.RLWheel);
     }
     public WheelHit[] wheelHits = new WheelHit[4];
-    
+
     void CheckParticles()
-    {        
+    {
         colliders.FRWheel.GetGroundHit(out wheelHits[0]);
         colliders.FLWheel.GetGroundHit(out wheelHits[1]);
 

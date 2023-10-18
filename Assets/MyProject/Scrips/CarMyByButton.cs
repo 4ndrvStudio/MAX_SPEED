@@ -15,15 +15,16 @@ public class CarMyByButton : MonoBehaviour
 
     void Update()
     {
-        if (isPressed)
-        {
-            dampenPress += sensitivity * Time.deltaTime;
-        }
-        else
-        {
-            dampenPress -= sensitivity * Time.deltaTime;
-        }
-        dampenPress = Mathf.Clamp01(dampenPress);
+        dampenPress = isPressed ? 1 : 0;
+
+        //if (isPressed && dampenPress <=1f)
+        //{
+        //    dampenPress += sensitivity * Time.deltaTime;
+        //}
+        //else
+        //{
+        //    dampenPress = 0;
+        //}
     }
     void SetUpButton()
     {
